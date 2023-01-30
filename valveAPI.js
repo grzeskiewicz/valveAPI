@@ -28,16 +28,17 @@ function motorON(channel){
     }
 
 function runValve(req, res){
-const valveNumber=req.body.valve;
+const valveNumber=Number(req.body.valve);
 let valve;
 switch (valveNumber){
  case 1: 
     valve=firstValve;
  case 2: 
- valve=secondValve;
+     valve=secondValve;
  case 3:
     valve=thirdValve;
-    case 4: valve=fourthValve;
+ case 4: 
+    valve=fourthValve;
 }
 //const startLight=req.body.startLight;
 //const harvest=req.body.harvest;
