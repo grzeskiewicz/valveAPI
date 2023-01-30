@@ -17,14 +17,14 @@ channel.write(1);
 console.log("STARTING ALL PUMPS: ")
 
 motorON(firstValve);
-setTimeout(()=>motorOFF(firstValve),20);
+setTimeout(()=>motorOFF(firstValve),20000);
 
 motorON(secondValve);
-setTimeout(()=>motorOFF(secondValve),15);
+setTimeout(()=>motorOFF(secondValve),15000);
 
 motorON(thirdValve);
-setTimeout(()=>motorOFF(thirdValve),10);
+setTimeout(()=>motorOFF(thirdValve),10000);
 
 motorON(fourthValve);
-setTimeout(()=>motorOFF(fourthValve),5);
+setTimeout(()=>motorOFF(fourthValve),5000);
 
