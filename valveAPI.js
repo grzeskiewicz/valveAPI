@@ -4,11 +4,11 @@ const cors = require('cors');
 const bodyParser = require('body-parser');
 const Gpio=require('orange-pi-gpio');
 const { body, validationResult } = require('express-validator');
-
+/*
 const firstValve=new Gpio({pin:22,mode:'out'});
 const secondValve=new Gpio({pin:23,mode:'out'});
 const thirdValve=new Gpio({pin:24,mode:'out'});
-const fourthValve=new Gpio({pin:25,mode:'out'});
+const fourthValve=new Gpio({pin:25,mode:'out'});*/
 
 app.use(cors());
 app.use(bodyParser.urlencoded({ extended: true })); // support encoded bodies
@@ -32,13 +32,13 @@ const valveNumber=Number(req.body.valve);
 let valve;
 switch (valveNumber){
  case 1: 
-    valve=firstValve;
+    valve=new Gpio({pin:22,mode:'out'});
  case 2: 
-     valve=secondValve;
+     valve=new Gpio({pin:23,mode:'out'});
  case 3:
-    valve=thirdValve;
+    valve=new Gpio({pin:24,mode:'out'});
  case 4: 
-    valve=fourthValve;
+    valve=new Gpio({pin:25,mode:'out'});;
 }
 //const startLight=req.body.startLight;
 //const harvest=req.body.harvest;
