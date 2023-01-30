@@ -28,14 +28,25 @@ function motorON(channel){
     }
 
 function runValve(req, res){
-    console.log(req.body)
-console.log("STARTING ALL PUMPS: ")
+const valveNumber=req.body.valve;
+let valve;
+switch (valveNumber){
+ case 1: 
+    valve=firstValve;
+ case 2: 
+ valve=secondValve;
+ case 3:
+    valve=thirdValve;
+    case 4: valve=fourthValve;
+}
+//const startLight=req.body.startLight;
+//const harvest=req.body.harvest;
+console.log("STARTING WATERING: ", valveNumber);
 
-motorON(firstValve);
-setTimeout(()=>motorOFF(firstValve),20000);
+motorON(valve);
+setTimeout(()=>motorOFF(valve,5000));
 
-setTimeout(()=>motorON(secondValve),20000);
-setTimeout(()=>motorOFF(secondValve),15000);
+
 /*
 motorON(thirdValve);
 setTimeout(()=>motorOFF(thirdValve),10000);
