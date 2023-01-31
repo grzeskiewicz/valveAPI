@@ -49,7 +49,7 @@ switch (valveNumber){
 console.log("STARTING WATERING: ", valveNumber);
 
 motorON(valve);
-setTimeout(()=>motorOFF(valve,5000));
+setTimeout(()=>motorOFF(valve),5000);
 
 
 /*
