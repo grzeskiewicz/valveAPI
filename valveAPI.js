@@ -33,12 +33,16 @@ let valve;
 switch (valveNumber){
  case 1: 
     valve=new Gpio({pin:22,mode:'out'});
+    break;
  case 2: 
      valve=new Gpio({pin:23,mode:'out'});
+     break;
  case 3:
     valve=new Gpio({pin:24,mode:'out'});
+    break;
  case 4: 
-    valve=new Gpio({pin:25,mode:'out'});;
+    valve=new Gpio({pin:25,mode:'out'});
+    break;
 }
 //const startLight=req.body.startLight;
 //const harvest=req.body.harvest;
