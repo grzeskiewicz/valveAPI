@@ -2,7 +2,7 @@ var scheduler = require('nodejs-persistable-scheduler');
 
 initialTask = function() {
   var AM = new Date();
-  AM.setHours(0,10,0);
+  AM.setHours(0,14,0);
   scheduler.registerTask("daily",AM,'METHOD1',null,null).then(function(ID) {
     if (ID)
     {
