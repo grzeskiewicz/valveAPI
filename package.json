@@ -8,11 +8,12 @@
     "cors": "*",
     "express": "^4.13.3",
     "express-validator": "^6.14.2",
-    "moment": "^2.29.4"
+    "moment": "^2.29.4",
+    "nodejs-persistable-scheduler":"*"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node valveAPI.js"
+    "start": "node test.js"
   },
   "keywords": [
     "valveAPI",
