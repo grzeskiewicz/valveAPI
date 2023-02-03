@@ -1,5 +1,7 @@
 const express = require('express'),
     app = express();
+    const http = require('http');
+    const querystring = require('querystring');
 const cors = require('cors');
 const bodyParser = require('body-parser');
 const Gpio=require('orange-pi-gpio');
@@ -17,6 +19,8 @@ app.options('*', cors()) // include before other routes
 
 
 
+
+
 function motorON(channel){
     console.log('ON',channel)
     channel.write(0);
@@ -25,7 +29,36 @@ function motorON(channel){
     function motorOFF(channel){
         console.log('OFF',channel)
         channel.write(1);
-        app.get('http://192.168.1.29/cm?cmnd=Power%20off', (req, res) => {res.json({success:true,msg: "OFF"})});
+        //http://192.168.1.29/cm
+        const parameters = {
+            cmnd: 'Power%20off',
+        }
+        
+        const get_request_args = querystring.stringify(parameters);
+
+        const options = {
+            url: "http://192.168.1.29",
+            port: "80",
+            path: "/cm?" + get_request_args,
+            headers : {
+                'Content-Type': 'application/x-www-form-urlencoded'
+            }
+        }
+
+        const request = http.request(options, (result) => {
+            // response from server
+            console.log(result);
+        });
+        
+        // In case error occurs while sending request
+        request.on('error', (error) => {
+            console.log(error.message);
+        });
+        
+        request.end();
+
+
+        //app.get('http://192.168.1.29/cm?cmnd=Power%20off', (req, res) => {res.json({success:true,msg: "OFF"})});
       }
 
 function runValve(req, res){
@@ -48,10 +81,35 @@ switch (valveNumber){
 //const startLight=req.body.startLight;
 //const harvest=req.body.harvest;
 console.log("STARTING WATERING: ", valveNumber);
-app.get('http://192.168.1.29/cm?cmnd=Power%20on', (req, res) => {
+
+const parameters = {
+    cmnd: 'Power%20off',
+}
+
+const get_request_args = querystring.stringify(parameters);
+
+const options = {
+    url: "http://192.168.1.29",
+    port: "80",
+    path: "/cm?" + get_request_args,
+    headers : {
+        'Content-Type': 'application/x-www-form-urlencoded'
+    }
+}
+
+const request = http.request(options, (result) => {
+    // response from server
+    console.log(result);
     motorON(valve);
     setTimeout(()=>motorOFF(valve),10000);   
 });
+
+// In case error occurs while sending request
+request.on('error', (error) => {
+    console.log(error.message);
+});
+
+request.end();
 
 
 
