@@ -7,6 +7,7 @@ agenda.define("cropID", async (job) => {
 
 (async function () {
     const job = agenda.create('cropID', {valve:1});
-	await agenda.start();
-	await job.repeatEvery("2 minutes", {timezone:'Europe/Warsaw',startDate:'2023-02-03T18:00:00+01:00',endDate:'2023-02-03T19:00:00+01:00'}).save();
+	await job.repeatEvery('0 0 20 3-7 3 2023').save();
+    await agenda.start();
+
 })();
