@@ -29,36 +29,25 @@ function motorON(channel){
     function motorOFF(channel){
         console.log('OFF',channel)
         channel.write(1);
-        //http://192.168.1.29/cm
-        const parameters = {
-            cmnd: 'Power%20off',
-        }
-        
+        const parameters = {cmnd: 'Power%20off'}
         const get_request_args = querystring.stringify(parameters);
 
         const options = {
             url: "http://192.168.1.29",
             port: "80",
-            path: "/cm?" + get_request_args,
-            headers : {
-                'Content-Type': 'application/x-www-form-urlencoded'
-            }
+            path: "/cm?" + get_request_args
         }
 
         const request = http.request(options, (result) => {
-            // response from server
+                // response from server
             console.log(result);
         });
-        
-        // In case error occurs while sending request
+                // In case error occurs while sending request
         request.on('error', (error) => {
             console.log(error.message);
         });
         
         request.end();
-
-
-        //app.get('http://192.168.1.29/cm?cmnd=Power%20off', (req, res) => {res.json({success:true,msg: "OFF"})});
       }
 
 function runValve(req, res){
@@ -78,27 +67,22 @@ switch (valveNumber){
     valve=new Gpio({pin:25,mode:'out'});
     break;
 }
-//const startLight=req.body.startLight;
-//const harvest=req.body.harvest;
+
 console.log("STARTING WATERING: ", valveNumber);
 
-const parameters = {
-    cmnd: 'Power%20off',
-}
-
+const parameters = {cmnd: 'Power%20on'}
 const get_request_args = querystring.stringify(parameters);
+
+console.log(get_request_args);
 
 const options = {
     url: "http://192.168.1.29",
     port: "80",
     path: "/cm?" + get_request_args,
-    headers : {
-        'Content-Type': 'application/x-www-form-urlencoded'
-    }
 }
 
+
 const request = http.request(options, (result) => {
-    // response from server
     console.log(result);
     motorON(valve);
     setTimeout(()=>motorOFF(valve),10000);   
@@ -112,8 +96,6 @@ request.on('error', (error) => {
 request.end();
 
 
-
-
 /*
 motorON(thirdValve);
 setTimeout(()=>motorOFF(thirdValve),10000);
@@ -121,14 +103,6 @@ setTimeout(()=>motorOFF(thirdValve),10000);
 motorON(fourthValve);
 setTimeout(()=>motorOFF(fourthValve),5000);*/
 }
-
-/*
-app.post('/addmicrogreens', [
-    body('nameEN').isString().withMessage("Not a string!").isLength({max:60}).withMessage("Too long value!"),
-    body('gramsTray').isInt().withMessage("Not integer!"),
-    body('topWater').isInt({max:1000}).withMessage("Not integer or too high value!"),
-],db.addMicrogreens);
- */
 
 
 app.post('/runvalve',runValve);
