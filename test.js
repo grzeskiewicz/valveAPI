@@ -8,5 +8,5 @@ agenda.define("cropx", async (job) => {
 (async function () {
     const job = agenda.create('cropx', {valve:1});
 	await agenda.start();
-	await job.repeatEvery("2 minutes", {timezone:'Europe/Warsaw',startDate:'2023-02-03 20:06',endDate:'2023-02-03 20:12'}).save();
+	await job.repeatEvery("2 minutes", {timezone:'Europe/Warsaw',startDate:'2023-02-03 20:08',endDate:'2023-02-03 20:14'}).save();
 })();
