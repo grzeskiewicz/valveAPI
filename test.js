@@ -1,4 +1,4 @@
-const Agenda = require("agenda");
+const Agenda = require("@hokify/agenda");
 const agenda = new Agenda({ db: { address: "mongodb://51.83.131.118:27020/valveSchedule" } });
 
 agenda.define("send monthly billing report", async (job) => {
