@@ -28,11 +28,10 @@ function motorOFF(channel,res) {
   axios
     .get("http://192.168.1.29:80/cm?cmnd=Power%20off")
     .then((response) => {
-      console.log(response.data.POWER);
-      res.json({success:true});
+      res.json({success:true, msg: "WATERING COMPLETED"});
     })
     .catch((error) => {
-      console.log(error);
+        res.json({success:false, msg: "CANT POWER OFF PUMP BUT WATERING COMPLETED"});
     });
 }
 
@@ -68,6 +67,7 @@ function runValve(req, res) {
     })
     .catch((error) => {
       console.log(error);
+      res.json({success:false, msg: "CANT POWER ON PUMP"});
     });
 }
 
