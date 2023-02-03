@@ -4,8 +4,6 @@ const agenda = new Agenda({ db: { address: "mongodb://51.83.131.118:27020/valveS
 agenda.define("send monthly billing report", async (job) => {
 });
 
-console.log(await agenda.jobs());
-
 
 (async function () {
   // IIFE to give access to async/await
