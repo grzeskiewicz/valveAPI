@@ -23,9 +23,10 @@ function motorON(channel){
     }
     
     function motorOFF(channel){
-    console.log('OFF',channel)
-    channel.write(1);
-    }
+        console.log('OFF',channel)
+        channel.write(1);
+        app.get('http://192.168.1.29/cm?cmnd=Power%20off', (req, res) => {res.json({success:true,msg: "OFF"})});
+      }
 
 function runValve(req, res){
 const valveNumber=Number(req.body.valve);
@@ -47,9 +48,12 @@ switch (valveNumber){
 //const startLight=req.body.startLight;
 //const harvest=req.body.harvest;
 console.log("STARTING WATERING: ", valveNumber);
+app.get('http://192.168.1.29/cm?cmnd=Power%20on', (req, res) => {
+    motorON(valve);
+    setTimeout(()=>motorOFF(valve),10000);   
+});
 
-motorON(valve);
-setTimeout(()=>motorOFF(valve),10000);
+
 
 
 /*
