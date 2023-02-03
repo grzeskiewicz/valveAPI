@@ -22,13 +22,14 @@ function motorON(channel) {
   channel.write(0);
 }
 
-function motorOFF(channel) {
+function motorOFF(channel,res) {
   console.log("OFF", channel);
   channel.write(1);
   axios
     .get("http://192.168.1.29:80/cm?cmnd=Power%20off")
     .then((response) => {
       console.log(response.data.POWER);
+      res.json({success:true});
     })
     .catch((error) => {
       console.log(error);
@@ -61,7 +62,7 @@ function runValve(req, res) {
         if (response.data.POWER==='ON') {
       setTimeout(() => {
         motorON(valve);
-        setTimeout(() => motorOFF(valve), 10000);
+        setTimeout(() => motorOFF(valve,res), 10000);
       }, 2000);
     }
     })
