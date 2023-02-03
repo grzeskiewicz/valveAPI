@@ -9,7 +9,8 @@
     "express": "^4.13.3",
     "express-validator": "^6.14.2",
     "moment": "^2.29.4",
-    "querystring":"*"
+    "querystring":"*",
+    "axios":"*"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",

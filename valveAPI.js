@@ -5,6 +5,7 @@ const express = require('express'),
 const cors = require('cors');
 const bodyParser = require('body-parser');
 const Gpio=require('orange-pi-gpio');
+const axios = require('axios');
 const { body, validationResult } = require('express-validator');
 /*
 const firstValve=new Gpio({pin:22,mode:'out'});
@@ -29,25 +30,13 @@ function motorON(channel){
     function motorOFF(channel){
         console.log('OFF',channel)
         channel.write(1);
-        const parameters = {cmnd: "Power"+"%20"+"off"}
-        const get_request_args = querystring.stringify(parameters);
-
-        const options = {
-            url: "http://192.168.1.29",
-            port: "80",
-            path: "/cm?" + get_request_args
-        }
-
-        const request = http.request(options, (result) => {
-                // response from server
-            console.log(result);
+        axios.get('http://192.168.1.29:80/cm?cmnd=Power%20off')
+        .then(response => {
+          console.log(response);
+        })
+        .catch(error => {
+          console.log(error);
         });
-                // In case error occurs while sending request
-        request.on('error', (error) => {
-            console.log(error.message);
-        });
-        
-        request.end();
       }
 
 function runValve(req, res){
@@ -70,30 +59,16 @@ switch (valveNumber){
 
 console.log("STARTING WATERING: ", valveNumber);
 
-const parameters = {cmnd: "Power"+"%20"+"on"}
-const get_request_args = querystring.stringify(parameters);
 
-console.log(get_request_args);
-
-const options = {
-    url: "http://192.168.1.29",
-    port: "80",
-    path: "/cm?" + get_request_args,
-}
-
-
-const request = http.request(options, (result) => {
-    console.log(result);
+axios.get('http://192.168.1.29:80/cm?cmnd=Power%20on')
+  .then(response => {
+    console.log(response);
     motorON(valve);
     setTimeout(()=>motorOFF(valve),10000);   
-});
-
-// In case error occurs while sending request
-request.on('error', (error) => {
-    console.log(error.message);
-});
-
-request.end();
+  })
+  .catch(error => {
+    console.log(error);
+  });
 
 
 /*
