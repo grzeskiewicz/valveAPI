@@ -29,7 +29,7 @@ function motorON(channel){
     function motorOFF(channel){
         console.log('OFF',channel)
         channel.write(1);
-        const parameters = {cmnd: "Power"+"\%"+"20off"}
+        const parameters = {cmnd: "Power"+"%20"+"off"}
         const get_request_args = querystring.stringify(parameters);
 
         const options = {
@@ -70,7 +70,7 @@ switch (valveNumber){
 
 console.log("STARTING WATERING: ", valveNumber);
 
-const parameters = {cmnd: "Power"+"\%"+"20on"}
+const parameters = {cmnd: "Power"+"%20"+"on"}
 const get_request_args = querystring.stringify(parameters);
 
 console.log(get_request_args);
