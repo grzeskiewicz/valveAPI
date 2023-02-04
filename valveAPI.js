@@ -189,8 +189,8 @@ async function scheduleWatering(req, res) {
       crop:crop
     });
     await agenda.start();
-    const days=start===stop ? start.date() : `${start.date()}-${stop.date()}`;
-    await job.repeatEvery(`30-31 21 ${days} ${stop.month()+1} *`, {
+    const days=req.body.start===req.body.stop ? start.date() : `${start.date()}-${stop.date()}`;
+    await job.repeatEvery(`33-34 21 ${days} ${stop.month()+1} *`, {
       timezone: "Europe/Warsaw",
     });
     await job.save();
