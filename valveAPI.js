@@ -201,7 +201,7 @@ res.json({msg:"WATERING SCHEDULED"});
 async function cropDone(req,res){
   const crop=req.body.crop;
   console.log(crop);
- const test= await agenda.cancel({ data: {crop:crop} });
+ const test= await agenda.cancel({ data: {crop:String(crop)} });
  console.log(test);
   res.json({success:true,msg:"SCHEDULE CANCELED"});
 }
