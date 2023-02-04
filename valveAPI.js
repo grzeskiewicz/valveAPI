@@ -16,6 +16,7 @@ agenda.define("wateringschedule", async (job) => {
 const data=job.attrs.data;
  await runValveScheduled(data.valve,data.duration,data.res);
 });
+agenda.start();
 /*
 const firstValve=new Gpio({pin:22,mode:'out'});
 const secondValve=new Gpio({pin:23,mode:'out'});
