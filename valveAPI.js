@@ -142,7 +142,7 @@ function runValveScheduled(valve,duration) {
 
 async function scheduleWatering(req, res) {
   const valve = Number(req.body.valve);
-  const crop = req.body.crop;
+  const crop = Number(req.body.crop);
   const start = moment(req.body.start);
   const stop = moment(req.body.stop);
   const duration = Number(req.body.duration);
@@ -199,9 +199,9 @@ res.json({msg:"WATERING SCHEDULED"});
 }
 
 async function cropDone(req,res){
-  const crop=req.body.crop;
+  const crop=Number(req.body.crop);
   console.log(crop);
- const test= await agenda.cancel({ data: {crop:String(crop)} });
+ const test= await agenda.cancel({ data: {crop:crop} });
  console.log(test);
   res.json({success:true,msg:"SCHEDULE CANCELED"});
 }
