@@ -190,7 +190,7 @@ async function scheduleWatering(req, res) {
     });
     await agenda.start();
     const days=req.body.start===req.body.stop ? start.date() : `${start.date()}-${stop.date()}`;
-    await job.repeatEvery(`32 22 ${days} ${stop.month()+1} *`, {
+    await job.repeatEvery(`${minute} 10 ${days} ${stop.month()+1} *`, {
       timezone: "Europe/Warsaw",
     });
     await job.save();
