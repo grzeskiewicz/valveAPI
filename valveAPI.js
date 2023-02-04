@@ -172,10 +172,10 @@ async function scheduleWatering(req, res) {
       res: res
     });
     await agenda.start();
-    await job.repeatEvery(`"${minute} 10 ${start.date()}-${startJobEnd} ${start.month()+1} ${start.year()}"`, {
+    await job.repeatEvery(`${minute} 10 ${start.date()}-${startJobEnd} ${start.month()+1} ${start.year()}`, {
       timezone: "Europe/Warsaw",
     });
-    await job.repeatEvery(`"${minute} 10 1-${stop.date()} ${stop.month()+1} ${stop.year()}"`, {
+    await job.repeatEvery(`${minute} 10 1-${stop.date()} ${stop.month()+1} ${stop.year()}`, {
       timezone: "Europe/Warsaw",
     });
     await job.save();
@@ -188,7 +188,7 @@ async function scheduleWatering(req, res) {
       crop:crop
     });
     await agenda.start();
-    await job.repeatEvery(`"*/2 20 ${start.date()}-${stop.date()} ${stop.month()+1} ${stop.year()}"`, {
+    await job.repeatEvery(`*/2 20 ${start.date()}-${stop.date()} ${stop.month()+1} ${stop.year()}`, {
       timezone: "Europe/Warsaw",
     });
     await job.save();
