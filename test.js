@@ -1,15 +1,19 @@
 const Agenda = require("agenda");
 const agenda = new Agenda({ db: { address: "mongodb://51.83.131.118:27020/valveSchedule" } });
 
-agenda.define("tester", async (job) => {
-    console.log("lolo")
+agenda.define("hopla", async (job) => {
+    console.log("KURWA")
 });
 
 (async function () {
-    const job = agenda.create('tester', {valve:1});
-	//await agenda.start();
+    const job = agenda.create('hopla', {valve:1});
+	await agenda.start();
+    const start=new Date();
+    start.setHours(14,25);
+    const end=new Date();
+    end.setHours(14,28);
 
-	await job.repeatEvery("2 minutes", {timezone:'Europe/Warsaw',startDate:'04.02.2023 14:13',endDate:'04.02.2023 14:17'});
-    await job.save()
+	await job.repeatEvery("2 minutes", {timezone:'Europe/Warsaw',startDate:start,endDate:end});
+    await job.save();
 })();
 
