@@ -106,7 +106,6 @@ function runValve(req, res) {
 
 function runValveScheduled(valve,duration) {
   const valveNumber = Number(valve);
-  let valve;
   switch (valveNumber) {
     case 1:
       valve = new Gpio({ pin: 22, mode: "out" });
@@ -189,7 +188,7 @@ async function scheduleWatering(req, res) {
       crop:crop
     });
     await agenda.start();
-    await job.repeatEvery(`"*/2 19 ${start.date()}-${stop.date()} ${stop.month()+1} ${stop.year()}"`, {
+    await job.repeatEvery(`"*/2 20 ${start.date()}-${stop.date()} ${stop.month()+1} ${stop.year()}"`, {
       timezone: "Europe/Warsaw",
     });
     await job.save();
