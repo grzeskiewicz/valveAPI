@@ -205,7 +205,7 @@ async function cropDone(req,res){
 }
 
 app.post("/runvalve", runValve);
-app.post("/cropDone", cropDone);
+app.post("/cropdone", cropDone);
 
 app.post("/schedule", scheduleWatering);
 
