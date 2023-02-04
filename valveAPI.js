@@ -189,7 +189,7 @@ async function scheduleWatering(req, res) {
       crop:crop
     });
     await agenda.start();
-    await job.repeatEvery(`*5,7 21 ${start.date()}-${stop.date()} ${stop.month()+1} *`, {
+    await job.repeatEvery(`7,9 21 ${start.date()}-${stop.date()} ${stop.month()+1} *`, {
       timezone: "Europe/Warsaw",
     });
     await job.save();
