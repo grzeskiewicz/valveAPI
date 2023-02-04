@@ -190,7 +190,7 @@ async function scheduleWatering(req, res) {
     });
     await agenda.start();
     const days=req.body.start===req.body.stop ? start.date() : `${start.date()}-${stop.date()}`;
-    await job.repeatEvery(`01-02 22 ${days} ${stop.month()+1} *`, {
+    await job.repeatEvery(`13 22 ${days} ${stop.month()+1} *`, {
       timezone: "Europe/Warsaw",
     });
     await job.save();
@@ -201,7 +201,7 @@ res.json({msg:"WATERING SCHEDULED"});
 async function cropDone(req,res){
   const crop=Number(req.body.crop);
   console.log(crop);
- const test= await agenda.cancel({ name: 'wateringschedule'});
+ const test= await agenda.cancel( data.crop === crop);
  console.log(test);
   res.json({success:true,msg:"SCHEDULE CANCELED"});
 }
