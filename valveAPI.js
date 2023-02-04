@@ -198,7 +198,15 @@ res.json({msg:"WATERING SCHEDULED"});
   }
 }
 
+async function cropDone(req,res){
+  const crop=req.body.crop;
+  await agenda.cancel({ data: {crop:crop} });
+  res.json({success:true,msg:"SCHEDULE CANCELED"});
+}
+
 app.post("/runvalve", runValve);
+app.post("/cropDone", cropDone);
+
 app.post("/schedule", scheduleWatering);
 
 app.listen("3051", () => {
