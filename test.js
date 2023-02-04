@@ -1,12 +1,12 @@
 const Agenda = require("agenda");
 const agenda = new Agenda({ db: { address: "mongodb://51.83.131.118:27020/valveSchedule" } });
 
-agenda.define("hoplaxd", async (job) => {
-    console.log(job)
+agenda.define("wateringschedule", async (job) => {
+    console.log(job.attrs.data)
 });
 
 (async function () {
-    const job = agenda.create('hoplaxd', {valve:1});
+    const job = agenda.create('wateringschedule', {valve:1});
 	await agenda.start();
 
 
