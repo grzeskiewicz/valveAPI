@@ -7,9 +7,9 @@ agenda.define("tester", async (job) => {
 
 (async function () {
     const job = agenda.create('tester', {valve:1});
-	await agenda.start();
+	//await agenda.start();
 
-
-	await job.repeatEvery("2 minutes", {timezone:'Europe/Warsaw',startDate:'04.02.2023 14:10',endDate:'04.02.2023 14:16'}).save();
+	await job.repeatEvery("2 minutes", {timezone:'Europe/Warsaw',startDate:'04.02.2023 14:13',endDate:'04.02.2023 14:17'});
+    await job.save()
 })();
 
