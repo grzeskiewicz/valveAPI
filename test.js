@@ -7,18 +7,15 @@ await agenda.cancel({ name: 'crop' });
 await agenda.cancel({ name: 'cropx' });
 
 
-agenda.define("nanana", async (job) => {
-    console.log("XDHEHEH2")
+agenda.define("tester", async (job) => {
+    console.log("lolo")
 });
 
 (async function () {
-    const job = agenda.create('nanana', {valve:1});
+    const job = agenda.create('tester', {valve:1});
 	await agenda.start();
-    const start=new Date();
-    start.setHours(20,34,0);
-    const end=new Date();
-    end.setHours(20,38,0);
 
-	await job.repeatEvery("2 minutes", {timezone:'Europe/Warsaw',startDate:start,endDate:end}).save();
+
+	await job.repeatEvery("2 minutes", {timezone:'Europe/Warsaw',startDate:'04.02.2023 14:02',endDate:'04.02.2023 14:06'}).save();
 })();
 
