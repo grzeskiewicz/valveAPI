@@ -194,16 +194,15 @@ res.json({success:true,msg:"WATERING SCHEDULED"});
   }
 }
 
-async function cropDone(req,res){
+async function deleteSchedule(req,res){
   const crop=Number(req.body.crop);
   console.log(crop);
  const test= await agenda.cancel({'data.crop':crop});
- console.log(test);
   res.json({success:true,msg:"SCHEDULE CANCELED"});
 }
 
 app.post("/runvalve", runValve);
-app.post("/cropdone", cropDone);
+app.post("/deleteschedule", deleteSchedule);
 
 app.post("/schedule", scheduleWatering);
 
