@@ -56,19 +56,15 @@ function motorOFFScheduled(channel) {
   axios
     .get("http://192.168.1.29:80/cm?cmnd=Power%20off")
     .then((response) => {
-      console.log("WATERING COMPLETED")
-     // res.json({ success: true, msg: "WATERING COMPLETED" });
+      console.log("WATERING COMPLETED");
     })
     .catch((error) => {
       console.log("CANT POWER OFF PUMP BUT WATERING COMPLETED");
-     /* res.json({
-        success: false,
-        msg: "CANT POWER OFF PUMP BUT WATERING COMPLETED",
-      });*/
     });
 }
 
 function runValve(req, res) {
+  const duration=Number(req.body.duration);
   const valveNumber = Number(req.body.valve);
   let valve;
   switch (valveNumber) {
@@ -94,8 +90,8 @@ function runValve(req, res) {
       if (response.data.POWER === "ON") {
         setTimeout(() => {
           motorON(valve);
-          setTimeout(() => motorOFF(valve, res), 10000);
-        }, 2000);
+          setTimeout(() => motorOFF(valve, res), duration*1000);
+        }, 4000);
       }
     })
     .catch((error) => {
@@ -194,7 +190,7 @@ async function scheduleWatering(req, res) {
       timezone: "Europe/Warsaw",
     });
     await job.save();
-res.json({msg:"WATERING SCHEDULED"});
+res.json({success:true,msg:"WATERING SCHEDULED"});
   }
 }
 
