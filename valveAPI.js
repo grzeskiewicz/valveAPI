@@ -178,7 +178,7 @@ async function scheduleWatering(req, res) {
     await job.save();
 
   } else {
-    console.log("TUTAJ")
+   // console.log("TUTAJ")
     const job = agenda.create("wateringschedule", {
       valve: valve,
       duration: duration,
