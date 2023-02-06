@@ -13,8 +13,8 @@ const agenda = new Agenda({
 });
 
 agenda.define("wateringschedule", async (job) => {
-const data=job.attrs.data;
- await runValveScheduled(data.valve,data.duration,data.res);
+  const data = job.attrs.data;
+  await runValveScheduled(data.valve, data.duration, data.res);
 });
 agenda.start();
 /*
@@ -34,11 +34,13 @@ function motorON(channel) {
 }
 
 function motorOFF(channel, res) {
-  console.log("OFF", channel);
-  channel.write(1);
   axios
     .get("http://192.168.1.29:80/cm?cmnd=Power%20off")
     .then((response) => {
+      setTimeout(() => {
+        console.log("OFF", channel);
+        channel.write(1);
+      }, 2000);
       res.json({ success: true, msg: "WATERING COMPLETED" });
     })
     .catch((error) => {
@@ -49,13 +51,12 @@ function motorOFF(channel, res) {
     });
 }
 
-
 function motorOFFScheduled(channel) {
-  console.log("OFF", channel);
-  channel.write(1);
   axios
     .get("http://192.168.1.29:80/cm?cmnd=Power%20off")
     .then((response) => {
+      console.log("OFF", channel);
+      channel.write(1);
       console.log("WATERING COMPLETED");
     })
     .catch((error) => {
@@ -64,7 +65,7 @@ function motorOFFScheduled(channel) {
 }
 
 function runValve(req, res) {
-  const duration=Number(req.body.duration);
+  const duration = Number(req.body.duration);
   const valveNumber = Number(req.body.valve);
   let valve;
   switch (valveNumber) {
@@ -90,7 +91,7 @@ function runValve(req, res) {
       if (response.data.POWER === "ON") {
         setTimeout(() => {
           motorON(valve);
-          setTimeout(() => motorOFF(valve, res), duration*1000);
+          setTimeout(() => motorOFF(valve, res), duration * 1000);
         }, 4000);
       }
     })
@@ -100,8 +101,7 @@ function runValve(req, res) {
     });
 }
 
-
-function runValveScheduled(valve,duration) {
+function runValveScheduled(valve, duration) {
   const valveNumber = Number(valve);
   switch (valveNumber) {
     case 1:
@@ -126,13 +126,13 @@ function runValveScheduled(valve,duration) {
       if (response.data.POWER === "ON") {
         setTimeout(() => {
           motorON(valve);
-          setTimeout(() => motorOFFScheduled(valve), duration*1000);
+          setTimeout(() => motorOFFScheduled(valve), duration * 1000);
         }, 2000);
       }
     })
     .catch((error) => {
-      console.log("CANT POWER ON PUMP" ,error);
-    /*  res.json({ success: false, msg: "CANT POWER ON PUMP" }); */
+      console.log("CANT POWER ON PUMP", error);
+      /*  res.json({ success: false, msg: "CANT POWER ON PUMP" }); */
     });
 }
 
@@ -166,39 +166,47 @@ async function scheduleWatering(req, res) {
       valve: valve,
       duration: duration,
       crop: crop,
-      res: res
+      res: res,
     });
     await agenda.start();
-    await job.repeatEvery(`${minute} 10 ${start.date()}-${startJobEnd} ${start.month()+1} *`, {
-      timezone: "Europe/Warsaw",
-    });
-    await job.repeatEvery(`${minute} 10 1-${stop.date()} ${stop.month()+1} *`, {
-      timezone: "Europe/Warsaw",
-    });
+    await job.repeatEvery(
+      `${minute} 10 ${start.date()}-${startJobEnd} ${start.month() + 1} *`,
+      {
+        timezone: "Europe/Warsaw",
+      }
+    );
+    await job.repeatEvery(
+      `${minute} 10 1-${stop.date()} ${stop.month() + 1} *`,
+      {
+        timezone: "Europe/Warsaw",
+      }
+    );
     await job.save();
-
   } else {
-   // console.log("TUTAJ")
+    // console.log("TUTAJ")
     const job = agenda.create("wateringschedule", {
       valve: valve,
       duration: duration,
-      crop:crop
+      crop: crop,
     });
     await agenda.start();
-    const days=req.body.start===req.body.stop ? start.date() : `${start.date()}-${stop.date()}`;
-    await job.repeatEvery(`${minute} 10 ${days} ${stop.month()+1} *`, {
+    const days =
+      req.body.start === req.body.stop
+        ? start.date()
+        : `${start.date()}-${stop.date()}`;
+    await job.repeatEvery(`${minute} 10 ${days} ${stop.month() + 1} *`, {
       timezone: "Europe/Warsaw",
     });
     await job.save();
-res.json({success:true,msg:"WATERING SCHEDULED"});
+    res.json({ success: true, msg: "WATERING SCHEDULED" });
   }
 }
 
-async function deleteSchedule(req,res){
-  const crop=Number(req.body.crop);
+async function deleteSchedule(req, res) {
+  const crop = Number(req.body.crop);
   console.log(crop);
- const test= await agenda.cancel({'data.crop':crop});
-  res.json({success:true,msg:"SCHEDULE CANCELED"});
+  const test = await agenda.cancel({ "data.crop": crop });
+  res.json({ success: true, msg: "SCHEDULE CANCELED" });
 }
 
 app.post("/runvalve", runValve);
