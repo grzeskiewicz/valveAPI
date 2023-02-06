@@ -37,6 +37,7 @@ function motorOFF(channel, res) {
   axios
     .get("http://192.168.1.29:80/cm?cmnd=Power%20off")
     .then((response) => {
+      console.log("PUMP OFF");
       setTimeout(() => {
         console.log("OFF", channel);
         channel.write(1);
@@ -55,8 +56,11 @@ function motorOFFScheduled(channel) {
   axios
     .get("http://192.168.1.29:80/cm?cmnd=Power%20off")
     .then((response) => {
-      console.log("OFF", channel);
-      channel.write(1);
+      console.log("PUMP OFF");
+      setTimeout(() => {
+        console.log("OFF", channel);
+        channel.write(1);
+      }, 2000);
       console.log("WATERING COMPLETED");
     })
     .catch((error) => {
@@ -89,6 +93,7 @@ function runValve(req, res) {
     .get("http://192.168.1.29:80/cm?cmnd=Power%20on")
     .then((response) => {
       if (response.data.POWER === "ON") {
+        console.log("PUMP ON");
         setTimeout(() => {
           motorON(valve);
           setTimeout(() => motorOFF(valve, res), duration * 1000);
