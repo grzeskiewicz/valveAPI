@@ -41,7 +41,7 @@ function motorOFF(channel, res) {
       setTimeout(() => {
         console.log("OFF", channel);
         channel.write(1);
-      }, 2000);
+      }, 4000);
       res.json({ success: true, msg: "WATERING COMPLETED" });
     })
     .catch((error) => {
@@ -88,7 +88,6 @@ function runValve(req, res) {
   }
 
   console.log("STARTING WATERING: ", valveNumber);
-
   axios
     .get("http://192.168.1.29:80/cm?cmnd=Power%20on")
     .then((response) => {
