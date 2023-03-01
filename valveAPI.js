@@ -36,7 +36,7 @@ function motorON(channel) {
 
 function motorOFF(channel, res) {
   axios
-    .get("tasmota-pump:80/cm?cmnd=Power%20off")
+    .get("http://tasmota-pump:80/cm?cmnd=Power%20off")
     .then((response) => {
       console.log("PUMP OFF");
       setTimeout(() => {
@@ -55,7 +55,7 @@ function motorOFF(channel, res) {
 
 function motorOFFScheduled(channel) {
   axios
-    .get("tasmota-pump:80/cm?cmnd=Power%20off")
+    .get("http://tasmota-pump:80/cm?cmnd=Power%20off")
     .then((response) => {
       console.log("PUMP OFF");
       setTimeout(() => {
@@ -90,7 +90,7 @@ function runValve(req, res) {
 
   console.log("STARTING WATERING: ", valveNumber);
   axios
-    .get("tasmota-pump:80/cm?cmnd=Power%20on")
+    .get("http://tasmota-pump:80/cm?cmnd=Power%20on")
     .then((response) => {
       if (response.data.POWER === "ON") {
         console.log("PUMP ON");
@@ -126,7 +126,7 @@ function runValveScheduled(valve, duration) {
   console.log("STARTING WATERING: ", valveNumber);
 
   axios
-    .get("tasmota-pump:80/cm?cmnd=Power%20on")
+    .get("http://tasmota-pump:80/cm?cmnd=Power%20on")
     .then((response) => {
       if (response.data.POWER === "ON") {
         setTimeout(() => {
