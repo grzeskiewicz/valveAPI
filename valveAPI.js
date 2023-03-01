@@ -23,6 +23,7 @@ const secondValve=new Gpio({pin:23,mode:'out'});
 const thirdValve=new Gpio({pin:24,mode:'out'});
 const fourthValve=new Gpio({pin:25,mode:'out'});*/
 
+
 app.use(cors());
 app.use(bodyParser.urlencoded({ extended: true })); // support encoded bodies
 app.use(bodyParser.json()); // support json encoded bodies
@@ -35,7 +36,7 @@ function motorON(channel) {
 
 function motorOFF(channel, res) {
   axios
-    .get("http://192.168.1.29:80/cm?cmnd=Power%20off")
+    .get("tasmota-pump:80/cm?cmnd=Power%20off")
     .then((response) => {
       console.log("PUMP OFF");
       setTimeout(() => {
@@ -54,7 +55,7 @@ function motorOFF(channel, res) {
 
 function motorOFFScheduled(channel) {
   axios
-    .get("http://192.168.1.29:80/cm?cmnd=Power%20off")
+    .get("tasmota-pump:80/cm?cmnd=Power%20off")
     .then((response) => {
       console.log("PUMP OFF");
       setTimeout(() => {
@@ -89,7 +90,7 @@ function runValve(req, res) {
 
   console.log("STARTING WATERING: ", valveNumber);
   axios
-    .get("http://192.168.1.29:80/cm?cmnd=Power%20on")
+    .get("tasmota-pump:80/cm?cmnd=Power%20on")
     .then((response) => {
       if (response.data.POWER === "ON") {
         console.log("PUMP ON");
@@ -125,7 +126,7 @@ function runValveScheduled(valve, duration) {
   console.log("STARTING WATERING: ", valveNumber);
 
   axios
-    .get("http://192.168.1.29:80/cm?cmnd=Power%20on")
+    .get("tasmota-pump:80/cm?cmnd=Power%20on")
     .then((response) => {
       if (response.data.POWER === "ON") {
         setTimeout(() => {
@@ -163,8 +164,7 @@ async function scheduleWatering(req, res) {
       break;
   }
 
-  if (start.month() !== stop.month()) {
-    //we gotta make 2 cron jobs!
+  if (start.month() !== stop.month()) {     //we gotta make 2 cron jobs!
     startJobEnd = start.daysInMonth();
     const job = agenda.create("wateringschedule", {
       valve: valve,
@@ -187,7 +187,6 @@ async function scheduleWatering(req, res) {
     );
     await job.save();
   } else {
-    // console.log("TUTAJ")
     const job = agenda.create("wateringschedule", {
       valve: valve,
       duration: duration,
@@ -221,6 +220,5 @@ app.post("/schedule", scheduleWatering);
 app.listen("3051", () => {
   console.log("VALVE API RUNNING");
 });
-//http.listen(port);
-//console.log('Server running on http://%s:%s', ip,port);
+
 module.exports = app;
