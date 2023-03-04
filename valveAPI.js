@@ -12,9 +12,10 @@ const agenda = new Agenda({
   db: { address: "mongodb://51.83.131.118:27020/valveSchedule" },
 });
 
-agenda.define("wateringschedule", async (job) => {
+agenda.define("wateringschedule", async (job,done) => {
   const data = job.attrs.data;
   await runValveScheduled(data.valve, data.duration, data.res);
+  done();
 });
 agenda.start();
 /*
@@ -149,18 +150,18 @@ async function scheduleWatering(req, res) {
   const duration = Number(req.body.duration);
 
   let minute;
-  switch (valve) {
+  switch (valve) { //testing agenda!!!!!!!!!!! change times later!
     case 1:
-      minute = 10;
+      minute = 16;
       break;
     case 2:
-      minute = 12;
+      minute = 17;
       break;
     case 3:
-      minute = 14;
+      minute = 19;
       break;
     case 4:
-      minute = 16;
+      minute = 20;
       break;
   }
 
@@ -197,7 +198,7 @@ async function scheduleWatering(req, res) {
       req.body.start === req.body.stop
         ? start.date()
         : `${start.date()}-${stop.date()}`;
-    await job.repeatEvery(`${minute} 10 ${days} ${stop.month() + 1} *`, {
+    await job.repeatEvery(`${minute} 12 ${days} ${stop.month() + 1} *`, {
       timezone: "Europe/Warsaw",
     });
     await job.save();
