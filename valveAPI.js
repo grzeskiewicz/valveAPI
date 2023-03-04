@@ -14,8 +14,7 @@ const agenda = new Agenda({
 
 agenda.define("wateringschedule", async (job,done) => {
   const data = job.attrs.data;
-  await runValveScheduled(data.valve, data.duration, data.res);
-  done();
+  await runValveScheduled(data.valve, data.duration, done);
 });
 agenda.start();
 /*
@@ -54,7 +53,7 @@ function motorOFF(channel, res) {
     });
 }
 
-function motorOFFScheduled(channel) {
+function motorOFFScheduled(channel,done) {
   axios
     .get("http://tasmota-pump:80/cm?cmnd=Power%20off")
     .then((response) => {
@@ -62,6 +61,7 @@ function motorOFFScheduled(channel) {
       setTimeout(() => {
         console.log("OFF", channel);
         channel.write(1);
+        done();
       }, 2000);
       console.log("WATERING COMPLETED");
     })
@@ -107,7 +107,7 @@ function runValve(req, res) {
     });
 }
 
-function runValveScheduled(valve, duration) {
+function runValveScheduled(valve, duration,done) {
   const valveNumber = Number(valve);
   switch (valveNumber) {
     case 1:
@@ -132,7 +132,7 @@ function runValveScheduled(valve, duration) {
       if (response.data.POWER === "ON") {
         setTimeout(() => {
           motorON(valve);
-          setTimeout(() => motorOFFScheduled(valve), duration * 1000);
+          setTimeout(() => motorOFFScheduled(valve,done), duration * 1000);
         }, 2000);
       }
     })
@@ -152,16 +152,16 @@ async function scheduleWatering(req, res) {
   let minute;
   switch (valve) { //testing agenda!!!!!!!!!!! change times later!
     case 1:
-      minute = 16;
+      minute = 23;
       break;
     case 2:
-      minute = 17;
+      minute = 24;
       break;
     case 3:
-      minute = 19;
+      minute = 25;
       break;
     case 4:
-      minute = 20;
+      minute = 26;
       break;
   }
 
