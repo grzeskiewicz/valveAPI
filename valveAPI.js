@@ -152,16 +152,16 @@ async function scheduleWatering(req, res) {
   let minute;
   switch (valve) { //testing agenda!!!!!!!!!!! change times later!
     case 1:
-      minute = 23;
+      minute = 10;
       break;
     case 2:
-      minute = 24;
+      minute = 12;
       break;
     case 3:
-      minute = 25;
+      minute = 14;
       break;
     case 4:
-      minute = 26;
+      minute = 16;
       break;
   }
 
