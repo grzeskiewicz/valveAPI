@@ -98,7 +98,7 @@ function runValve(req, res) {
         setTimeout(() => {
           motorON(valve);
           setTimeout(() => motorOFF(valve, res), duration * 1000);
-        }, 6000);
+        }, 2000);
       }
     })
     .catch((error) => {
