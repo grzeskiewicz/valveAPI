@@ -133,7 +133,7 @@ function runValveScheduled(valve, duration,done) {
         setTimeout(() => {
           motorON(valve);
           setTimeout(() => motorOFFScheduled(valve,done), duration * 1000);
-        }, 5000);
+        }, 2000);
       }
     })
     .catch((error) => {
