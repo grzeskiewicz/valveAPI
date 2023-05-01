@@ -172,9 +172,9 @@ async function scheduleWatering(req, res) {
     const job = agenda.create("wateringschedule", {
       valve: valve,
       duration: duration,
-      crop: crop,
-      res: res,
+      crop: crop
     });
+    console.log("XD AGENDA")
     await agenda.start();
     await job.repeatEvery(
       `${minute} 10 ${start.date()}-${startJobEnd} ${start.month() + 1} *`,
