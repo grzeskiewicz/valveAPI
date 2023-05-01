@@ -189,6 +189,8 @@ async function scheduleWatering(req, res) {
       }
     );
     await job.save();
+    console.log("SCHEDULING COMPLETED");
+    res.json({ success: true, msg: "WATERING SCHEDULED" });
   } else {
     const job = agenda.create("wateringschedule", {
       valve: valve,
