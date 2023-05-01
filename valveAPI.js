@@ -164,6 +164,8 @@ async function scheduleWatering(req, res) {
       minute = 16;
       break;
   }
+  console.log(req.body);
+  console.log("SCHEDULING...");
 
   if (start.month() !== stop.month()) {     //we gotta make 2 cron jobs!
     startJobEnd = start.daysInMonth();
@@ -202,6 +204,7 @@ async function scheduleWatering(req, res) {
       timezone: "Europe/Warsaw",
     });
     await job.save();
+    console.log("SCHEDULING COMPLETED");
     res.json({ success: true, msg: "WATERING SCHEDULED" });
   }
 }
