@@ -9,7 +9,7 @@ const { body, validationResult } = require("express-validator");
 const moment = require("moment");
 const Agenda = require("agenda");
 const agenda = new Agenda({
-  db: { address: "mongodb://watering.farmabracia.ovh:27017/valveSchedule" }, 
+  db: { address: "mongodb://192.168.1.35:27017/valveSchedule" }, //lan address of server
 });
 
 agenda.define("wateringschedule", async (job,done) => {
