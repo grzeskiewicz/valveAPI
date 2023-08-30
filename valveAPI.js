@@ -77,6 +77,7 @@ function runValve(req, res) {
   const duration = Number(req.body.duration);
   const valveNumber = Number(req.body.valve);
   let valve;
+  console.log(duration,valveNumber);
   switch (valveNumber) {
     case 1:
       valve = new Gpio({ pin: 22, mode: "out" });
