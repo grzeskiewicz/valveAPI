@@ -5,13 +5,14 @@
   "main": "valveAPI.js",
   "dependencies": {
     "@hokify/agenda": "^6.3.0",
+    "agenda": "*",
     "axios": "*",
     "body-parser": "*",
     "cors": "*",
     "express": "^4.13.3",
     "express-validator": "^6.14.2",
     "moment": "^2.29.4",
-    "agenda":"*"
+    "orange-pi-gpio": "^1.0.2"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
