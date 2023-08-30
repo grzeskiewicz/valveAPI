@@ -1,5 +1,8 @@
+const PUMP_API="192.168.0.212";
+const DB_SERVER="192.168.0.200";
 const express = require("express"),
   app = express();
+
 
 const cors = require("cors");
 const bodyParser = require("body-parser");
@@ -9,7 +12,7 @@ const { body, validationResult } = require("express-validator");
 const moment = require("moment");
 const Agenda = require("agenda");
 const agenda = new Agenda({
-  db: { address: "mongodb://192.168.1.35:27017/valveSchedule" }, //lan address of server
+  db: { address: `mongodb://${DB_SERVER}:27017/valveSchedule` }, //lan address of server
 });
 
 agenda.define("wateringschedule", async (job,done) => {
@@ -36,7 +39,7 @@ function motorON(channel) {
 
 function motorOFF(channel, res) {
   axios
-    .get("http://tasmota-pump:80/cm?cmnd=Power%20off")
+    .get(`http://${PUMP_API}:80/cm?cmnd=Power%20off`)
     .then((response) => {
       console.log("PUMP OFF");
       setTimeout(() => {
@@ -55,7 +58,7 @@ function motorOFF(channel, res) {
 
 function motorOFFScheduled(channel,done) {
   axios
-    .get("http://tasmota-pump:80/cm?cmnd=Power%20off")
+    .get(`http://${PUMP_API}:80/cm?cmnd=Power%20off`)
     .then((response) => {
       console.log("PUMP OFF");
       setTimeout(() => {
@@ -91,7 +94,7 @@ function runValve(req, res) {
 
   console.log("STARTING WATERING: ", valveNumber);
   axios
-    .get("http://tasmota-pump:80/cm?cmnd=Power%20on")
+    .get(`http://${PUMP_API}:80/cm?cmnd=Power%20on`)
     .then((response) => {
       if (response.data.POWER === "ON") {
         console.log("PUMP ON");
@@ -127,7 +130,7 @@ function runValveScheduled(valve, duration,done) {
   console.log("STARTING WATERING: ", valveNumber);
 
   axios
-    .get("http://tasmota-pump:80/cm?cmnd=Power%20on")
+    .get(`http://${PUMP_API}:80/cm?cmnd=Power%20on`)
     .then((response) => {
       if (response.data.POWER === "ON") {
         setTimeout(() => {
