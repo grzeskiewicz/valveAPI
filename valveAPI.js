@@ -1,5 +1,5 @@
-const PUMP_API="192.168.0.212";
-const DB_SERVER="192.168.0.200";
+const PUMP_API='192.168.0.212';
+const DB_SERVER='192.168.0.200';
 const express = require("express"),
   app = express();
 
@@ -94,8 +94,7 @@ function runValve(req, res) {
   }
 
   console.log("STARTING WATERING: ", valveNumber);
-  axios
-    .get(`http://${PUMP_API}:80/cm?cmnd=Power%20on`)
+  axios.get(`http://${PUMP_API}:80/cm?cmnd=Power%20on`)
     .then((response) => {
       if (response.data.POWER === "ON") {
         console.log("PUMP ON");
