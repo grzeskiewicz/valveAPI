@@ -39,7 +39,7 @@ function motorON(channel) {
 
 function motorOFF(channel, res) {
   axios
-    .get(`http://${PUMP_API}:80/cm?cmnd=Power%20off`)
+    .get(`http://${PUMP_API}/cm?cmnd=Power%20off`)
     .then((response) => {
       console.log("PUMP OFF");
       setTimeout(() => {
@@ -58,7 +58,7 @@ function motorOFF(channel, res) {
 
 function motorOFFScheduled(channel,done) {
   axios
-    .get(`http://${PUMP_API}:80/cm?cmnd=Power%20off`)
+    .get(`http://${PUMP_API}/cm?cmnd=Power%20off`)
     .then((response) => {
       console.log("PUMP OFF");
       setTimeout(() => {
@@ -94,7 +94,7 @@ function runValve(req, res) {
   }
 
   console.log("STARTING WATERING: ", valveNumber);
-  axios.get(`http://${PUMP_API}:80/cm?cmnd=Power%20on`)
+  axios.get(`http://${PUMP_API}/cm?cmnd=Power%20on`)
     .then((response) => {
       if (response.data.POWER === "ON") {
         console.log("PUMP ON");
@@ -130,7 +130,7 @@ function runValveScheduled(valve, duration,done) {
   console.log("STARTING WATERING: ", valveNumber);
 
   axios
-    .get(`http://${PUMP_API}:80/cm?cmnd=Power%20on`)
+    .get(`http://${PUMP_API}/cm?cmnd=Power%20on`)
     .then((response) => {
       if (response.data.POWER === "ON") {
         setTimeout(() => {
