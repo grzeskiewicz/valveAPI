@@ -129,7 +129,7 @@ function runValve(req, res) {
       valve = new Gpio({ pin: 25, mode: "out" });
       break;
   }
-
+if (valveNumber <= 8 ) {
   console.log("STARTING WATERING: ", valveNumber);
   axios
     .get(`http://${PUMP_API}/cm?cmnd=Power%20on`)
@@ -146,6 +146,10 @@ function runValve(req, res) {
       console.log(error);
       res.json({ success: false, msg: "CANT POWER ON PUMP" });
     });
+  } else{
+    motorON(valve);
+    setTimeout(() => motorOFF(valve, res), duration * 1000);
+  }
 }
 
 function runValveScheduled(valve, duration, done) {

@@ -20,11 +20,7 @@ agenda.define("wateringschedule", async (job,done) => {
   await runValveScheduled(data.valve, data.duration, done);
 });
 agenda.start();
-/*
-const firstValve=new Gpio({pin:22,mode:'out'});
-const secondValve=new Gpio({pin:23,mode:'out'});
-const thirdValve=new Gpio({pin:24,mode:'out'});
-const fourthValve=new Gpio({pin:25,mode:'out'});*/
+
 
 
 app.use(cors());
@@ -92,7 +88,7 @@ function runValve(req, res) {
       valve = new Gpio({ pin: 25, mode: "out" });
       break;
   }
-
+if (valveNumber <= 2) {
   console.log("STARTING WATERING: ", valveNumber);
   axios.get(`http://${PUMP_API}/cm?cmnd=Power%20on`)
     .then((response) => {
@@ -108,6 +104,10 @@ function runValve(req, res) {
       console.log(error);
       res.json({ success: false, msg: "CANT POWER ON PUMP" });
     });
+  } else {
+    motorON(valve);
+    setTimeout(() => motorOFF(valve, res), duration * 1000);
+  }
 }
 
 function runValveScheduled(valve, duration,done) {
