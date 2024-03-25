@@ -77,7 +77,7 @@ function runValve(req, res) {
   let valve;
   console.log(duration, valveNumber);
   switch (valveNumber) {
-    //BLUE
+    //OUT
     case 1:
       valve = new Gpio({ pin: 13, mode: "out" });
       break;
@@ -103,30 +103,30 @@ function runValve(req, res) {
       valve = new Gpio({ pin: 27, mode: "out" });
       break;
     /*========================================================*/
-    //WHITE
+    //IN PMP
     case 9:
-      valve = new Gpio({ pin: 5, mode: "out" });
+      valve = new Gpio({ pin: 25, mode: "out" });
       break;
     case 10:
-      valve = new Gpio({ pin: 7, mode: "out" });
-      break;
-    case 11:
-      valve = new Gpio({ pin: 11, mode: "out" });
-      break;
-    case 12:
-      valve = new Gpio({ pin: 12, mode: "out" });
-      break;
-    case 13:
-      valve = new Gpio({ pin: 20, mode: "out" });
-      break;
-    case 14:
-      valve = new Gpio({ pin: 22, mode: "out" });
-      break;
-    case 15:
       valve = new Gpio({ pin: 23, mode: "out" });
       break;
+    case 11:
+      valve = new Gpio({ pin: 22, mode: "out" });
+      break;
+    case 12:
+      valve = new Gpio({ pin: 20, mode: "out" });
+      break;
+    case 13:
+      valve = new Gpio({ pin: 12, mode: "out" });
+      break;
+    case 14:
+      valve = new Gpio({ pin: 11, mode: "out" });
+      break;
+    case 15:
+      valve = new Gpio({ pin: 7, mode: "out" });
+      break;
     case 16:
-      valve = new Gpio({ pin: 25, mode: "out" });
+      valve = new Gpio({ pin: 5, mode: "out" });
       break;
   }
 if (valveNumber <= 8 ) {
