@@ -129,7 +129,7 @@ function runValve(req, res) {
       valve = new Gpio({ pin: 5, mode: "out" });
       break;
   }
-if (valveNumber <= 8 ) {
+if (valveNumber > 8 ) {
   console.log("STARTING WATERING: ", valveNumber);
   axios
     .get(`http://${PUMP_API}/cm?cmnd=Power%20on`)
