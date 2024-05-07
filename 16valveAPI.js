@@ -16,7 +16,7 @@ const agenda = new Agenda({
 
 agenda.define("wateringschedule", async (job, done) => {
   const data = job.attrs.data;
-  await runValveScheduled(data.valve, data.duration, done);
+  await runValveScheduled(data.valve, data.duration, data.cropData, done);
 });
 agenda.start();
 /*
@@ -78,185 +78,227 @@ function runValve(req, res) {
   console.log(duration, valveNumber);
   switch (valveNumber) {
     //OUT
-    case 1:
+    case 9:
       valve = new Gpio({ pin: 13, mode: "out" });
       break;
-    case 2:
+    case 10:
       valve = new Gpio({ pin: 15, mode: "out" });
       break;
-    case 3:
-      valve = new Gpio({ pin: 16, mode: "out" }); 
+    case 11:
+      valve = new Gpio({ pin: 16, mode: "out" });
       break;
-    case 4:
+    case 12:
       valve = new Gpio({ pin: 18, mode: "out" });
       break;
-    case 5:
+    case 13:
       valve = new Gpio({ pin: 21, mode: "out" });
       break;
-    case 6:
+    case 14:
       valve = new Gpio({ pin: 24, mode: "out" });
       break;
-    case 7:
+    case 15:
       valve = new Gpio({ pin: 26, mode: "out" });
       break;
-    case 8:
+    case 16:
       valve = new Gpio({ pin: 27, mode: "out" });
       break;
     /*========================================================*/
     //IN PMP
-    case 9:
+    case 1:
       valve = new Gpio({ pin: 25, mode: "out" });
       break;
-    case 10:
+    case 2:
       valve = new Gpio({ pin: 23, mode: "out" });
       break;
-    case 11:
+    case 3:
       valve = new Gpio({ pin: 22, mode: "out" });
       break;
-    case 12:
+    case 4:
       valve = new Gpio({ pin: 20, mode: "out" });
       break;
-    case 13:
+    case 5:
       valve = new Gpio({ pin: 12, mode: "out" });
       break;
-    case 14:
+    case 6:
       valve = new Gpio({ pin: 11, mode: "out" });
       break;
-    case 15:
+    case 7:
       valve = new Gpio({ pin: 7, mode: "out" });
       break;
-    case 16:
+    case 8:
       valve = new Gpio({ pin: 5, mode: "out" });
       break;
   }
-if (valveNumber > 8 ) {
-  console.log("STARTING WATERING: ", valveNumber);
-  axios
-    .get(`http://${PUMP_API}/cm?cmnd=Power%20on`)
-    .then((response) => {
-      if (response.data.POWER === "ON") {
-        console.log("PUMP ON");
-        setTimeout(() => {
-          motorON(valve);
-          setTimeout(() => motorOFF(valve, res), duration * 1000);
-        }, 2000);
-      }
-    })
-    .catch((error) => {
-      console.log(error);
-      res.json({ success: false, msg: "CANT POWER ON PUMP" });
-    });
-  } else{
+  if (valveNumber > 8) {
+    console.log("STARTING WATERING: ", valveNumber);
+    axios
+      .get(`http://${PUMP_API}/cm?cmnd=Power%20on`)
+      .then((response) => {
+        if (response.data.POWER === "ON") {
+          console.log("PUMP ON");
+          setTimeout(() => {
+            motorON(valve);
+            setTimeout(() => motorOFF(valve, res), duration * 1000);
+          }, 2000);
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+        res.json({ success: false, msg: "CANT POWER ON PUMP" });
+      });
+  } else {
     motorON(valve);
     setTimeout(() => motorOFF(valve, res), duration * 1000);
   }
 }
 
-function runValveScheduled(valve, duration, done) {
+function runValveScheduled(valve, duration, cropData, done) {
   const valveNumber = Number(valve);
+  //console.log(cropData);
   switch (valveNumber) {
+    //OUT
+    case 9:
+      valve = new Gpio({ pin: 13, mode: "out" });
+      break;
+    case 10:
+      valve = new Gpio({ pin: 15, mode: "out" });
+      break;
+    case 11:
+      valve = new Gpio({ pin: 16, mode: "out" });
+      break;
+    case 12:
+      valve = new Gpio({ pin: 18, mode: "out" });
+      break;
+    case 13:
+      valve = new Gpio({ pin: 21, mode: "out" });
+      break;
+    case 14:
+      valve = new Gpio({ pin: 24, mode: "out" });
+      break;
+    case 15:
+      valve = new Gpio({ pin: 26, mode: "out" });
+      break;
+    case 16:
+      valve = new Gpio({ pin: 27, mode: "out" });
+      break;
+    /*========================================================*/
+    //IN PMP
     case 1:
-      valve = new Gpio({ pin: 22, mode: "out" });
+      valve = new Gpio({ pin: 25, mode: "out" });
       break;
     case 2:
       valve = new Gpio({ pin: 23, mode: "out" });
       break;
     case 3:
-      valve = new Gpio({ pin: 24, mode: "out" });
+      valve = new Gpio({ pin: 22, mode: "out" });
       break;
     case 4:
-      valve = new Gpio({ pin: 25, mode: "out" });
+      valve = new Gpio({ pin: 20, mode: "out" });
+      break;
+    case 5:
+      valve = new Gpio({ pin: 12, mode: "out" });
+      break;
+    case 6:
+      valve = new Gpio({ pin: 11, mode: "out" });
+      break;
+    case 7:
+      valve = new Gpio({ pin: 7, mode: "out" });
+      break;
+    case 8:
+      valve = new Gpio({ pin: 5, mode: "out" });
       break;
   }
 
   console.log("STARTING WATERING: ", valveNumber);
-
-  axios
-    .get(`http://${PUMP_API}/cm?cmnd=Power%20on`)
-    .then((response) => {
-      if (response.data.POWER === "ON") {
-        setTimeout(() => {
-          motorON(valve);
-          setTimeout(() => motorOFFScheduled(valve, done), duration * 1000);
-        }, 2000);
-      }
-    })
-    .catch((error) => {
-      console.log("CANT POWER ON PUMP", error);
-      /*  res.json({ success: false, msg: "CANT POWER ON PUMP" }); */
-    });
+  if (valveNumber > 8) {
+    axios
+      .get(`http://${PUMP_API}/cm?cmnd=Power%20on`)
+      .then((response) => {
+        if (response.data.POWER === "ON") {
+          setTimeout(() => {
+            motorON(valve);
+            setTimeout(() => motorOFFScheduled(valve, done), duration * 1000);
+          }, 2000);
+        }
+      })
+      .catch((error) => {
+        console.log("CANT POWER ON PUMP", error);
+        /*  res.json({ success: false, msg: "CANT POWER ON PUMP" }); */
+      });
+  } else {
+    motorON(valve);
+    setTimeout(() => motorOFF(valve, res), duration * 1000);
+  }
 }
 
 async function scheduleWatering(req, res) {
-  const valve = Number(req.body.valve);
-  const crop = Number(req.body.crop);
-  const start = moment(req.body.start);
-  const stop = moment(req.body.stop);
-  const duration = Number(req.body.duration);
-
-  let minute;
-  switch (
-    valve //testing agenda!!!!!!!!!!! change times later!
-  ) {
-    case 1:
-      minute = 10;
-      break;
-    case 2:
-      minute = 12;
-      break;
-    case 3:
-      minute = 14;
-      break;
-    case 4:
-      minute = 16;
-      break;
-  }
-  console.log(req.body);
+  const schedule = req.body.schedule
+  // console.log(req.body);
   console.log("SCHEDULING...");
 
-  if (start.month() !== stop.month()) {
-    //we gotta make 2 cron jobs!
-    startJobEnd = start.daysInMonth();
-    const job = agenda.create("wateringschedule", {
-      valve: valve,
-      duration: duration,
-      crop: crop,
-    });
-    console.log("XD AGENDA");
-    await agenda.start();
-    await job.repeatEvery(
-      `${minute} 10 ${start.date()}-${startJobEnd} ${start.month() + 1} *`,
-      {
-        timezone: "Europe/Warsaw",
+
+  for (const dayGrp of schedule) {
+    for (const fnd of dayGrp) {
+      if (fnd !== undefined) {
+        const valve = fnd[0].fndtray_id;
+        const cropData = fnd[0].cropData;
+        let minute, duration;
+        switch (valve) {
+          case 1:
+            minute = 4;
+            duration = 60;
+            break;
+          case 2:
+            minute = 6;
+            duration = 60;
+            break;
+          case 3:
+            minute = 8;
+            duration = 50;
+            break;
+          case 4:
+            minute = 10;
+            duration = 50;
+            break;
+          case 5:
+            minute = 12;
+            duration = 40;
+            break;
+          case 6:
+            minute = 14;
+            duration = 40;
+            break;
+          case 7:
+            minute = 16;
+            duration = 30;
+            break;
+          case 8:
+            minute = 18;
+            duration = 30;
+            break;
+        }
+
+        const date = moment(fnd[0].date).set({ hour: 10, minute: minute });
+
+        const job = agenda.create("wateringschedule", {
+          valve: valve,
+          duration: duration,
+          cropData: cropData,
+        });
+
+
+        await agenda.start();
+        await job.schedule(date, { timezone: "Europe/Warsaw", });
+        await job.save();
       }
-    );
-    await job.repeatEvery(
-      `${minute} 10 1-${stop.date()} ${stop.month() + 1} *`,
-      {
-        timezone: "Europe/Warsaw",
-      }
-    );
-    await job.save();
-    console.log("SCHEDULING COMPLETED");
-    res.json({ success: true, msg: "WATERING SCHEDULED" });
-  } else {
-    const job = agenda.create("wateringschedule", {
-      valve: valve,
-      duration: duration,
-      crop: crop,
-    });
-    await agenda.start();
-    const days =
-      req.body.start === req.body.stop
-        ? start.date()
-        : `${start.date()}-${stop.date()}`;
-    await job.repeatEvery(`${minute} 10 ${days} ${stop.month() + 1} *`, {
-      timezone: "Europe/Warsaw",
-    });
-    await job.save();
-    console.log("SCHEDULING COMPLETED");
-    res.json({ success: true, msg: "WATERING SCHEDULED" });
+    }
   }
+
+
+
+  console.log("SCHEDULING COMPLETED");
+  res.json({ success: true, msg: "WATERING SCHEDULED" });
+
 }
 
 async function deleteSchedule(req, res) {
