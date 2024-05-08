@@ -276,17 +276,20 @@ async function scheduleWatering(req, res) {
         }
 
         const date = moment(fnd[0].date).set({ hour: 10, minute: minute });
+        if (date.isAfter(moment())){ //zabezpieczenie przed odpalaniem przeszłych tasków
+          const job = agenda.create("wateringschedule", {
+            valve: valve,
+            duration: duration,
+            cropData: cropData,
+          });
+  
+  
+          await agenda.start();
+          await job.schedule(date, { timezone: "Europe/Warsaw", });
+          await job.save();
+        }
 
-        const job = agenda.create("wateringschedule", {
-          valve: valve,
-          duration: duration,
-          cropData: cropData,
-        });
 
-
-        await agenda.start();
-        await job.schedule(date, { timezone: "Europe/Warsaw", });
-        await job.save();
       }
     }
   }
