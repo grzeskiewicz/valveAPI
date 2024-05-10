@@ -234,6 +234,7 @@ function runValveScheduled(valve, duration, cropData, done) {
 async function scheduleWatering(req, res) {
   const schedule = req.body.schedule
   console.log("SCHEDULING...");
+  console.log(schedule);
   for (const dayGrp of schedule) {
     for (const fnd of dayGrp) {
       if (fnd !== undefined && fnd!==null) {
