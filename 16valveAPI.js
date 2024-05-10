@@ -235,9 +235,9 @@ async function scheduleWatering(req, res) {
   const schedule = req.body.schedule
   console.log("SCHEDULING...");
   for (const dayGrp of schedule) {
-    console.log(dayGrp)
+    console.log("dayGrp",dayGrp)
     for (const fnd of dayGrp) {
-      console.log(fnd)
+      console.log("FND",fnd)
       if (fnd !== undefined && fnd!==null) {
         const valve = fnd[0].fndtray_id;
         const cropData = fnd[0].cropData;
