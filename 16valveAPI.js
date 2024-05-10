@@ -235,7 +235,9 @@ async function scheduleWatering(req, res) {
   const schedule = req.body.schedule
   console.log("SCHEDULING...");
   for (const dayGrp of schedule) {
+    console.log(dayGrp)
     for (const fnd of dayGrp) {
+      console.log(fnd)
       if (fnd !== undefined && fnd!==null) {
         const valve = fnd[0].fndtray_id;
         const cropData = fnd[0].cropData;
@@ -284,7 +286,6 @@ async function scheduleWatering(req, res) {
             cropData: cropData,
           });
   
-  console.log('xD')
           await agenda.start();
           await job.schedule(date, { timezone: "Europe/Warsaw", });
           await job.save();
