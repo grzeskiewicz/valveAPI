@@ -234,7 +234,6 @@ function runValveScheduled(valve, duration, cropData, done) {
 async function scheduleWatering(req, res) {
   const schedule = req.body.schedule
   console.log("SCHEDULING...");
-  console.log(schedule);
   for (const dayGrp of schedule) {
     for (const fnd of dayGrp) {
       if (fnd !== undefined && fnd!==null) {
@@ -277,6 +276,7 @@ async function scheduleWatering(req, res) {
         }
 
         const date = moment(fnd[0].date).set({ hour: 10, minute: minute });
+        console.log(date,moment())
         if (date.isAfter(moment())){ //zabezpieczenie przed odpalaniem przeszłych tasków
           const job = agenda.create("wateringschedule", {
             valve: valve,
@@ -284,7 +284,7 @@ async function scheduleWatering(req, res) {
             cropData: cropData,
           });
   
-  
+  console.log('xD')
           await agenda.start();
           await job.schedule(date, { timezone: "Europe/Warsaw", });
           await job.save();
