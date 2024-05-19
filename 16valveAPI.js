@@ -237,7 +237,7 @@ async function scheduleWatering(req, res) {
   for (const dayGrp of schedule) {
     console.log("dayGrp",dayGrp)
     for (const fnd of dayGrp) {
-      console.log("FND",fnd)
+    //  console.log("FND",fnd)
       if (fnd !== undefined && fnd!==null) {
         const valve = fnd[0].fndtray_id;
         const cropData = fnd[0].cropData;
@@ -278,7 +278,6 @@ async function scheduleWatering(req, res) {
         }
 
         const date = moment(fnd[0].date).set({ hour: 10, minute: minute });
-      //  console.log(date,moment())
         if (date.isAfter(moment())){ //zabezpieczenie przed odpalaniem przeszłych tasków
           const job = agenda.create("wateringschedule", {
             valve: valve,
@@ -302,8 +301,8 @@ async function scheduleWatering(req, res) {
 
 async function deleteSchedule(req, res) {
   const crop = Number(req.body.crop);
-  console.log(crop);
-  const test = await agenda.cancel({ "data.crop": crop });
+  console.log("SCHE",crop);
+  const test = await agenda.cancel({ "data.cropData.id": crop });
   res.json({ success: true, msg: "SCHEDULE CANCELED" });
 }
 
