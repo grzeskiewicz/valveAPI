@@ -7,7 +7,6 @@ const cors = require("cors");
 const bodyParser = require("body-parser");
 const Gpio = require("orange-pi-gpio");
 const axios = require("axios");
-const { body, validationResult } = require("express-validator");
 const moment = require("moment");
 const Agenda = require("agenda");
 const agenda = new Agenda({
@@ -19,11 +18,6 @@ agenda.define("wateringschedule", async (job, done) => {
   await runValveScheduled(data.valve, data.duration, data.cropData, done);
 });
 agenda.start();
-/*
-const firstValve=new Gpio({pin:22,mode:'out'});
-const secondValve=new Gpio({pin:23,mode:'out'});
-const thirdValve=new Gpio({pin:24,mode:'out'});
-const fourthValve=new Gpio({pin:25,mode:'out'});*/
 
 app.use(cors());
 app.use(bodyParser.urlencoded({ extended: true })); // support encoded bodies
@@ -223,7 +217,7 @@ function runValveScheduled(valve, duration, cropData, done) {
       })
       .catch((error) => {
         console.log("CANT POWER ON PUMP", error);
-        /*  res.json({ success: false, msg: "CANT POWER ON PUMP" }); */
+          res.json({ success: false, msg: "CANT POWER ON PUMP" });
       });
   } else {
     motorON(valve);
@@ -235,45 +229,49 @@ async function scheduleWatering(req, res) {
   const schedule = req.body.schedule
   console.log("SCHEDULING...");
   for (const dayGrp of schedule) {
-    console.log("dayGrp",dayGrp)
     for (const fnd of dayGrp) {
-    //  console.log("FND",fnd)
       if (fnd !== undefined && fnd!==null) {
+          const trayWithLowestWateringLevel = fnd.reduce( //taca z najniższym watering_level używana jako wartość nawadniania dla całej półki (zabezpieczenie przed przewodnieniem np brokuła)
+            (prev, current) => {
+              return prev.microgreensData.watering_level < current.microgreensData.watering_level ? prev : current
+            });
+           // console.log(fnd[0].fndtray_id,moment(fnd[0].date).format('DD.MM.YYYY'),trayWithLowestWateringLevel);
         const valve = fnd[0].fndtray_id;
         const cropData = fnd[0].cropData;
+        const wateringLevel=trayWithLowestWateringLevel.microgreensData.watering_level; //stopniowanie nawodnienia - 1,2,3 - mnożnik
         let minute, duration;
-        switch (valve) {
+        switch (valve) { 
           case 1:
             minute = 4;
-            duration = 60;
+            duration = 50*wateringLevel;
             break;
           case 2:
             minute = 6;
-            duration = 60;
+            duration = 50*wateringLevel;
             break;
           case 3:
             minute = 8;
-            duration = 50;
+            duration = 40*wateringLevel;
             break;
           case 4:
             minute = 10;
-            duration = 50;
+            duration = 40*wateringLevel;
             break;
           case 5:
             minute = 12;
-            duration = 40;
+            duration = 30*wateringLevel;
             break;
           case 6:
             minute = 14;
-            duration = 40;
+            duration = 30*wateringLevel;
             break;
           case 7:
             minute = 16;
-            duration = 30;
+            duration = 20*wateringLevel;
             break;
           case 8:
             minute = 18;
-            duration = 30;
+            duration = 20*wateringLevel;
             break;
         }
 
@@ -289,8 +287,6 @@ async function scheduleWatering(req, res) {
           await job.schedule(date, { timezone: "Europe/Warsaw", });
           await job.save();
         }
-
-
       }
     }
   }
@@ -301,7 +297,7 @@ async function scheduleWatering(req, res) {
 
 async function deleteSchedule(req, res) {
   const crop = Number(req.body.crop);
-  console.log("SCHE",crop);
+  console.log("SCHEDULE DELETE",crop);
   const test = await agenda.cancel({ "data.cropData.id": crop });
   res.json({ success: true, msg: "SCHEDULE CANCELED" });
 }
