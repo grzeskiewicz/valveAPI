@@ -29,6 +29,11 @@ function motorON(channel) {
   channel.write(0);
 }
 
+function motorOFFNoPump(channel) {
+  console.log("OFF", channel);
+  channel.write(1);
+}
+
 function motorOFF(channel, res) {
   axios
     .get(`http://${PUMP_API}/cm?cmnd=Power%20off`)
@@ -63,6 +68,35 @@ function motorOFFScheduled(channel, done) {
     .catch((error) => {
       console.log("CANT POWER OFF PUMP BUT WATERING COMPLETED");
     });
+}
+
+
+function resetValves(req,res){
+  const valvesArray=[];
+    valvesArray[9]= new Gpio({ pin: 13, mode: "out" });
+    valvesArray[10] = new Gpio({ pin: 15, mode: "out" });
+    valvesArray[11] = new Gpio({ pin: 16, mode: "out" });
+    valvesArray[12] = new Gpio({ pin: 18, mode: "out" });
+    valvesArray[13] = new Gpio({ pin: 21, mode: "out" });
+    valvesArray[14] = new Gpio({ pin: 24, mode: "out" });
+    valvesArray[15] = new Gpio({ pin: 26, mode: "out" });
+    valvesArray[16] = new Gpio({ pin: 27, mode: "out" });
+  /*========================================================*/
+  //IN PMP
+    valvesArray[1] = new Gpio({ pin: 25, mode: "out" });
+    valvesArray[2]  = new Gpio({ pin: 23, mode: "out" });
+    valvesArray[3] = new Gpio({ pin: 22, mode: "out" });
+    valvesArray[4]  = new Gpio({ pin: 20, mode: "out" });
+    valvesArray[5]  = new Gpio({ pin: 12, mode: "out" });
+    valvesArray[6] = new Gpio({ pin: 11, mode: "out" });
+    valvesArray[7] = new Gpio({ pin: 7, mode: "out" });
+    valvesArray[8] = new Gpio({ pin: 5, mode: "out" });
+
+    for (const valve of valvesArray){
+      if (valve) setTimeout(() => motorOFFNoPump(valve) , 1000);
+
+    }
+    res.json({success:true,msg:"RESET_COMPLETED"});
 }
 
 function runValve(req, res) {
@@ -228,6 +262,7 @@ function runValveScheduled(valve, duration, cropData, done) {
 async function scheduleWatering(req, res) {
   const schedule = req.body.schedule
   console.log("SCHEDULING...");
+  const cleanSchedule=await agenda.cancel();
   for (const dayGrp of schedule) {
     for (const fnd of dayGrp) {
       if (fnd !== undefined && fnd!==null) {
@@ -235,8 +270,8 @@ async function scheduleWatering(req, res) {
             (prev, current) => {
               return prev.microgreensData.watering_level < current.microgreensData.watering_level ? prev : current
             });
-           // console.log(fnd[0].fndtray_id,moment(fnd[0].date).format('DD.MM.YYYY'),trayWithLowestWateringLevel);
-        const valve = fnd[0].fndtray_id;
+
+            const valve = fnd[0].fndtray_id;
         const cropData = fnd[0].cropData;
         const wateringLevel=trayWithLowestWateringLevel.microgreensData.watering_level; //stopniowanie nawodnienia - 1,2,3 - mnożnik
         let minute, duration;
@@ -275,6 +310,7 @@ async function scheduleWatering(req, res) {
             break;
         }
 
+
         const date = moment(fnd[0].date).set({ hour: 10, minute: minute });
         if (date.isAfter(moment())){ //zabezpieczenie przed odpalaniem przeszłych tasków
           const job = agenda.create("wateringschedule", {
@@ -302,10 +338,17 @@ async function deleteSchedule(req, res) {
   res.json({ success: true, msg: "SCHEDULE CANCELED" });
 }
 
+async function cleanSchedule(req,res){
+ await agenda.cancel().then((result)=>{
+    res.json({ success: true, msg: "SCHEDULE_EMPTY" });
+  });
+}
+
 app.post("/runvalve", runValve);
 app.post("/deleteschedule", deleteSchedule);
-
 app.post("/schedule", scheduleWatering);
+app.get("/resetvalves",resetValves);
+app.get("/cleanschedule", cleanSchedule);
 
 app.listen("3051", () => {
   console.log("VALVE API RUNNING");
