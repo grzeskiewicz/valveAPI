@@ -1,5 +1,5 @@
-const PUMP_API='192.168.2.11';
-const DB_SERVER='192.168.2.3';
+const PUMP_API='192.168.1.11';
+const DB_SERVER='192.168.1.3';
 const express = require("express"),
   app = express();
 
