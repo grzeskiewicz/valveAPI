@@ -157,7 +157,7 @@ function runValve(req, res) {
       valve = new Gpio({ pin: 5, mode: "out" });
       break;
   }
-  if (valveNumber > 8) {
+  if (valveNumber < 9) {
     console.log("STARTING WATERING: ", valveNumber);
     axios
       .get(`http://${PUMP_API}/cm?cmnd=Power%20on`)
@@ -238,7 +238,7 @@ function runValveScheduled(valve, duration, cropData, done) {
   }
 
   console.log("STARTING WATERING: ", valveNumber);
-  if (valveNumber > 8) {
+  if (valveNumber < 9) {
     axios
       .get(`http://${PUMP_API}/cm?cmnd=Power%20on`)
       .then((response) => {
