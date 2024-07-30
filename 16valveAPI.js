@@ -1,8 +1,6 @@
 const PUMP_API = "192.168.1.11";
 const DB_SERVER = "192.168.1.3";
-const express = require("express"),
-  app = express();
-
+const express = require("express"), app = express();
 const cors = require("cors");
 const bodyParser = require("body-parser");
 const Gpio = require("orange-pi-gpio");
@@ -93,7 +91,7 @@ function resetValves(req,res){
     valvesArray[8] = new Gpio({ pin: 5, mode: "out" });
 
     for (const valve of valvesArray){
-      if (valve) setTimeout(() => motorOFFNoPump(valve) , 1000);
+      if (valve) setTimeout(() => motorOFFNoPump(valve) , 2000);
 
     }
     res.json({success:true,msg:"RESET_COMPLETED"});
