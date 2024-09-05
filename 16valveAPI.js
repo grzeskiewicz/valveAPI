@@ -29,7 +29,7 @@ function motorON(channel) {
 
 function motorOFFNoPump(channel) {
   console.log("OFF", channel);
-  channel.write(1);
+  setTimeout(() => channel.write(1),2000);
 }
 
 function motorOFF(channel, res) {
@@ -91,7 +91,7 @@ function resetValves(req,res){
     valvesArray[8] = new Gpio({ pin: 5, mode: "out" });
 
     for (const valve of valvesArray){
-      if (valve) setTimeout(() => motorOFFNoPump(valve) , 2000);
+      if (valve) motorOFFNoPump(valve);
 
     }
     res.json({success:true,msg:"RESET_COMPLETED"});
