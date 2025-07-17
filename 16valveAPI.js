@@ -97,7 +97,7 @@ function resetValve(req,res){
 
 
     setTimeout(() => {
-  motorOFFNoPump(valve);
+  motorOFFNoPump(valvesArray[valve]);
           }, 3000);
 
   /*  for (const valve of valvesArray){
