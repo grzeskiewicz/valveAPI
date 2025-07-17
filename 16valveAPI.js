@@ -29,7 +29,9 @@ function motorON(channel) {
 
 function motorOFFNoPump(channel) {
   console.log("OFF", channel);
+  setTimeout(() => {
   channel.write(1);
+          }, 2000);
 }
 
 function motorOFF(channel, res) {
@@ -93,7 +95,7 @@ function resetValves(req,res){
     for (const valve of valvesArray){
       if (valve) setTimeout(() => {
 motorOFFNoPump(valve);
-          }, 3000);
+          }, 2000);
     }
     res.json({success:true,msg:"RESET_COMPLETED"});
 }
