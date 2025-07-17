@@ -95,6 +95,11 @@ function resetValve(req,res){
 console.log("VALVE",valve);
   motorOFFNoPump(valvesArray[valve]);
 
+            setTimeout(() => {
+            motorON(valve);
+            setTimeout(() =>  motorOFFNoPump(valvesArray[valve]), 1000);;
+          }, 2000);
+
   /*  for (const valve of valvesArray){
       if (valve) setTimeout(() => {
 motorOFFNoPump(valve);
