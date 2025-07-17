@@ -72,6 +72,9 @@ function motorOFFScheduled(channel, done) {
 
 
 function resetValves(req,res){
+
+  const valve=req.body.valve;
+  
   const valvesArray=[];
     valvesArray[9]= new Gpio({ pin: 13, mode: "out" });
     valvesArray[10] = new Gpio({ pin: 15, mode: "out" });
@@ -92,11 +95,16 @@ function resetValves(req,res){
     valvesArray[7] = new Gpio({ pin: 7, mode: "out" });
     valvesArray[8] = new Gpio({ pin: 5, mode: "out" });
 
-    for (const valve of valvesArray){
+
+    setTimeout(() => {
+  motorOFFNoPump(valve);
+          }, 3000);
+
+  /*  for (const valve of valvesArray){
       if (valve) setTimeout(() => {
 motorOFFNoPump(valve);
           }, 2000);
-    }
+    }*/
     res.json({success:true,msg:"RESET_COMPLETED"});
 }
 
