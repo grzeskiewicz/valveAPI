@@ -96,7 +96,7 @@ console.log("VALVE",valve);
   motorOFFNoPump(valvesArray[valve]);
 
             setTimeout(() => {
-            motorON(valve);
+            motorON(valvesArray[valve]);
             setTimeout(() =>  motorOFFNoPump(valvesArray[valve]), 2000);
           }, 2000);
 
