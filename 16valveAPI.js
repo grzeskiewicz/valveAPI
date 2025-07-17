@@ -91,8 +91,7 @@ function resetValves(req,res){
     valvesArray[8] = new Gpio({ pin: 5, mode: "out" });
 
     for (const valve of valvesArray){
-      if (valve) motorOFFNoPump(valve);
-
+      if (valve) setTimeout(() => motorOFFNoPump(valve),3000);
     }
     res.json({success:true,msg:"RESET_COMPLETED"});
 }
