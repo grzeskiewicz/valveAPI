@@ -29,7 +29,7 @@ function motorON(channel) {
 
 function motorOFFNoPump(channel) {
   console.log("OFF", channel);
-  setTimeout(() => channel.write(1),2000);
+  channel.write(1)
 }
 
 function motorOFF(channel, res) {
