@@ -92,7 +92,7 @@ function resetValve(req,res){
     valvesArray[6] = new Gpio({ pin: 11, mode: "out" });
     valvesArray[7] = new Gpio({ pin: 7, mode: "out" });
     valvesArray[8] = new Gpio({ pin: 5, mode: "out" });
-
+console.log("VALVE",valve);
   motorOFFNoPump(valvesArray[valve]);
 
   /*  for (const valve of valvesArray){
