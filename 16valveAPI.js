@@ -71,7 +71,7 @@ function motorOFFScheduled(channel, done) {
 }
 
 
-function resetValves(req,res){
+function resetValve(req,res){
 
   const valve=req.body.valve;
   
@@ -356,7 +356,7 @@ async function cleanSchedule(req,res){
 app.post("/runvalve", runValve);
 app.post("/deleteschedule", deleteSchedule);
 app.post("/schedule", scheduleWatering);
-app.get("/resetvalves",resetValves);
+app.post("/resetvalve",resetValve);
 app.get("/cleanschedule", cleanSchedule);
 
 app.listen("3051", () => {
